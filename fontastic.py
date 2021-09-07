@@ -47,13 +47,20 @@ class Converter:
                 for license in possible_licenses:
 
                     # try two different URL patterns
-                    url = "https://github.com/google/fonts/blob/main/%s/%s/static/%s.ttf?raw=true" % (
-                        license, font_name.lower(), filename)
+                    url = "https://github.com/google/fonts/raw/main/%s/%s/static/%s.ttf" % (
+                        license, font_name.lower().replace(" ",""), filename.replace(" ",""))
                     response = requests.get(url=url)
 
                     if not response.ok:
-                        url = "https://github.com/google/fonts/blob/main/%s/%s/%s.ttf?raw=true" % (
-                            license, font_name.lower(), filename)
+                        url = "https://github.com/google/fonts/raw/main/%s/%s/%s.ttf" % (
+                            license, font_name.lower().replace(" ",""), filename.replace(" ",""))
+                        print(url)
+                        response = requests.get(url=url)
+
+                    if not response.ok:
+                        url = "https://github.com/google/fonts/raw/main/%s/%s/%s[wght].ttf" % (
+                            license, font_name.lower().replace(" ",""), filename.replace(" ","").replace("-Regular",""))
+                        print(url)
                         response = requests.get(url=url)
 
                     if response.ok:

@@ -1,6 +1,6 @@
 # fontastic
 
-Tools to download google font files and material design icons
+Tools to download google web font files and material design icons
 
 ## Google fonts
 
@@ -35,13 +35,15 @@ To install all dependencies using pip:
 
 ## Usage - fontastic.py
 
+* To download the roboto font files and extract width to height ratios...
+
 ```
-# To download the roboto font files and extract width to height ratios...
-
 python3 fontastic.py Roboto <output-folder>
+```
 
-Creates the files:
+...creates the files:
 
+```
 <output-folder>/
     Roboto/
         LICENSE.txt
@@ -59,7 +61,7 @@ Creates the files:
         Roboto-BoldItalic.json
 ```
 
-## JSON format for font geometry files
+* JSON format for font geometry files
 
 The format for these files is fairly self-explanatory
 
@@ -85,8 +87,7 @@ The format for these files is fairly self-explanatory
 ```
 ## Usage - materialise.py
 
-
-Just download zip containing latest material design icons (~500Mb) to the cache folder and 
+* Download zip containing latest material design icons (~500Mb) to the cache folder and 
 index it ready for extraction:
 
 ```
@@ -97,57 +98,73 @@ To get the names of the icons visit https://fonts.google.com/icons?selected=Mate
 Select an icon and on the right hand side of the screen, a panel is displayed.  Just above the buttons to manually 
 download the SVG and PNG files, a text box provides the unique name of the icon in lower case letters and underscores.
 
-Extract specific icons `home` and `folder` to the icons subfolder of the current directory in outline and round styles
+* Extract specific icons `home` and `folder` to the icons subfolder of the current directory in outline and round styles
 
 ```
-python3 materialise.py --cache-folder /tmp --output-folder ./icons 
-      --icon-names "home,folder" 
-      --icon-styles "outline,round"
+python3 materialise.py --cache-folder /tmp --svg-output-folder ./icons \ 
+      --icon-names home folder  \
+      --icon-styles outline round
 ```
 
 Creates the following files
 
 ```
 icons/
-    home_outline_24px.svg
+    home_outlined_24px.svg
     home_round_24px.svg
-    home_outline_24px.css
-    home_round_24px.css
-    folder_outline_24px.svg
+    folder_outlined_24px.svg
     folder_round_24px.svg
-    folder_outline_24px.css
-    folder_round_24px.css
 ```
-
-Download the same icons but attempt convert to orange and purple (experimental):
+    
+* Extracts the same icons but attempt convert to orange and purple (experimental):
 
 ```
-python3 materialise.py --cache-folder /tmp --output-folder `pwd`/icons 
-    --icon-names "home,folder" --icon-styles "outline,round"
-    --icon-colours "orange,purple"
+python3 materialise.py --cache-folder /tmp --svg-output-folder ./icons \
+    --icon-names home folder --icon-styles outlined round \
+    --icon-colours orange purple
 ```
 
-Creates the following files
+...creates the following files
 
 ```
 icons/
     home_outline_orange_24px.svg
     home_round_orange_24px.svg
-    home_outline_purple_24px.svg
+    home_outlined_purple_24px.svg
     home_round_purple_24px.svg
-    home_outline_orange_24px.css
-    home_round_orange_24px.css
-    home_outline_purple_24px.css
-    home_round_purple_24px.css
-    folder_outline_orange_24px.svg
-    folder_round__orange_24px.svg
-    folder_outline_purple_24px.svg
+    folder_outlined_orange_24px.svg
+    folder_round_orange_24px.svg
+    folder_outlined_purple_24px.svg
     folder_round_purple_24px.svg
-    folder_outline_orange_24px.css
-    folder_round__orange_24px.css
-    folder_outline_purple_24px.css
-    folder_round_purple_24px.css
+```
+    
+* Create a CSS-based icon file
+
+```
+python3 ../materialise.py --cache-folder /tmp --css-output-path icons.css \
+    --icon-names home folder --icon-styles outlined round \
+    --icon-colours orange purple
 ```
 
+...creates or appends to a CSS file containing a class for each extracted icon, for example:
 
+```
+.home-round-orange {
+    /* material-icon home round orange */
+    background-image: url('data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDI0djI0SDBWMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTAgMTl2LTVoNHY1YzAgLjU1LjQ1IDEgMSAxaDNjLjU1IDAgMS0uNDUgMS0xdi03aDEuN2MuNDYgMCAuNjgtLjU3LjMzLS44N0wxMi42NyAzLjZjLS4zOC0uMzQtLjk2LS4zNC0xLjM0IDBsLTguMzYgNy41M2MtLjM0LjMtLjEzLjg3LjMzLjg3SDV2N2MwIC41NS40NSAxIDEgMWgzYy41NSAwIDEtLjQ1IDEtMXoiIGZpbGw9Im9yYW5nZSIvPjwvc3ZnPg==');
+}
+```
 
+* You can specify a file containing one icon name per line, using the `--icon-names-file <PATH>` option
+
+* When writing icons as CSS classes, specify a prefix for the class names using `--css-prefix <PREFIX>`
+
+* When specifying icon names, colours or styles, you can rename the names/colours,styles by adding a suffix `=newname`
+
+For example:
+
+```
+python3 ../materialise.py --cache-folder /tmp --css-output-path icons.css \
+    --icon-names "home=house" folder --icon-styles "outlined=outline" round \
+    --icon-colours "#FF2035=red" purple
+```
